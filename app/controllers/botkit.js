@@ -138,51 +138,63 @@ controller.hears('decide between (.*) (?:or|and) (.*)', 'direct_message,direct_m
 controller.hears('eliminate(.*)', 'direct_message,direct_mention,mention', function(bot, message) {
 
     if (message.match[1] === '') {
-        bot.startConversation(message, function(err, convo) {
+      bot.startConversation(message, function (err, convo) {
 
-            convo.say("Great, let's make your decision using the elimination algorithm.");
-            convo.ask("Please list all your options, separating each option with commas.", function(response, convo) {
-                choicesArray = response.text.split(",");
-                convo.next();
-                convo.say('Awesome thanks for that.');
-
-                function eliminate(i) {
-                    if (1 != choicesArray.length) {
-                        convo.say('You have the following options left: ' + choicesArray);
-                        convo.next();
-                        convo.ask("Which option would you like to eliminate?", function(response, convo) {
-                            choicesArray.remove(response.text);
-                            eliminate(i + 1);
-                        });
-                    } else {
-                        convo.next();
-                        convo.say('Great, you picked ' + choicesArray + '!');
-                    }
-                }
-                eliminate(0);
+          convo.say("Great, let's make your decision using the elimination algorithm.");
+          convo.ask("Please list all your options, separating each option with commas.", function (response, convo) {
+            unformattedChoicesArray = response.text.split(",");
+            choicesArray = unformattedChoicesArray.map(function(element) {
+              newElement = element.trim();
+              return newElement;
             });
-        });
-    } else {
-        bot.startConversation(message, function(err, convo) {
-            choicesArray = message.match[1].split(",");
-
-            function eliminate(i) {
-                if (1 != choicesArray.length) {
-                    convo.say('You have the following options left: ' + choicesArray);
-                    convo.next();
-                    convo.ask("Which option would you like to eliminate?", function(response, convo) {
-                        choicesArray.remove(response.text);
-                        eliminate(i + 1);
-                    });
-                } else {
-                    convo.next();
-                    convo.say('Great, you picked ' + choicesArray + '!');
-                }
-            }
-            eliminate(0);
-        });
+              convo.next();
+              convo.say('Awesome thanks for that.');
+              function eliminate(i) {
+                  if(1 != choicesArray.length) {
+                      convo.say('You have the following options left: '+ choicesArray);
+                      convo.next();
+                      convo.ask("Which option would you like to eliminate?", function(response, convo) {
+                          choicesArray.remove(response.text);
+                          eliminate(i+1);
+                      });
+                  }
+                  else {
+                      convo.next();
+                      convo.say('Great, you picked ' + choicesArray + '!');
+                  }
+              }
+              eliminate(0);
+          });
+      });
     }
-
+    else {
+      bot.startConversation(message, function (err, convo) {
+            if(err) {
+              console.log("startConversation Error");
+              return;
+            }
+            unformattedChoicesArray = message.match[1].split(",");
+            choicesArray = unformattedChoicesArray.map(function(element) {
+              newElement = element.trim();
+              return newElement;
+            });
+              function eliminate(i) {
+                  if(1 != choicesArray.length) {
+                      convo.say('You have the following options left: '+ choicesArray);
+                      convo.next();
+                      convo.ask("Which option would you like to eliminate?", function(response, convo) {
+                          choicesArray.remove(response.text);
+                          eliminate(i+1);
+                      });
+                  }
+                  else {
+                      convo.next();
+                      convo.say('Great, you picked ' + choicesArray + '!');
+                  }
+              }
+              eliminate(0);
+          });
+    }
 });
 
 controller.storage.teams.all(function(err, teams) {
