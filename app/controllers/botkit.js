@@ -4,12 +4,16 @@ var connect = function() {
     //     process.exit(1);
     // }
 
-    var Botkit = require('botkit');
+    var Botkit = require('botkit'),
+        mongoStorage = require('botkit-storage-mongo')({mongoUri: process.env.MONGODB_URI}),
+        controller = Botkit.slackbot({
+            debug: true,
+            storage: mongoStorage
+        });
+
     var os = require('os');
 
-    var controller = Botkit.slackbot({
-        debug: true,
-    });
+
 
     var bot = controller.spawn({
         token: process.env.TOKEN
