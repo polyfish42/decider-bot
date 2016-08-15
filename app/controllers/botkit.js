@@ -12,8 +12,7 @@ var connect = function() {
     });
 
     var bot = controller.spawn({
-        // token: process.env.token
-        token: 'xoxb-53123835794-ODi5bIzav8CykGZLCNs0UMqw'
+        token: process.env.TOKEN
     }).startRTM();
 
 
