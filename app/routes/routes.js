@@ -13,4 +13,19 @@ module.exports = function(app) {
     connect();
     res.send('Hello World');
   });
+
+  app.get('/new', function(req, res) {
+    console.log("================== START TEAM REGISTRATION ==================");
+    //temporary authorization code
+    var auth_code = req.query.code;
+
+    if(!auth_code){
+      //user refused auth
+      res.redirect('/');
+    }
+    else{
+      console.log("New user auth code " + auth_code);
+      perform_auth(auth_code, res);
+    }
+  });
 };
