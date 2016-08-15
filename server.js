@@ -6,6 +6,8 @@ var dotenv = require('dotenv');
 
 dotenv.load();
 
+app.use(express.static(__dirname + '/public'));
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); //for parsing url encoded
 
