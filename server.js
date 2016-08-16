@@ -1,4 +1,5 @@
 var express = require('express');
+var helmet = require('helmet');
 var app = express();
 var bodyParser = require('body-parser');
 var http = require('http').Server(app);
@@ -7,7 +8,7 @@ var dotenv = require('dotenv');
 dotenv.load();
 
 app.use(express.static(__dirname + '/public'));
-
+app.use(helmet());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); //for parsing url encoded
 
