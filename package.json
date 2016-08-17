@@ -25,6 +25,7 @@
     "ejs": "^2.5.1",
     "express": "^4.14.0",
     "helmet": "^2.1.2",
+    "nodemailer": "^2.5.0",
     "request": "^2.74.0"
   },
   "devDependencies": {

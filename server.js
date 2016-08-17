@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var http = require('http').Server(app);
 var dotenv = require('dotenv');
 
-
 dotenv.load(); // Loads local environment variables from .env file
 
 app.use(express.static(__dirname + '/public')); // Tells the app to use express as its view generator

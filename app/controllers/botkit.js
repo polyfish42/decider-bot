@@ -4,6 +4,15 @@ var Botkit = require('botkit'),
     });
 
 var os = require('os');// Allows you to get information about the operation system.
+var nodemailer = require('nodemailer'); // For sending email.
+
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'polyfish42@gmail.com',
+    pass: process.env.GMAIL_PASS
+  }
+});
 
 if (!process.env.SLACK_ID || !process.env.SLACK_SECRET || !process.env.PORT) {
   console.log('Error: Specify SLACK_ID SLACK_SECRET and PORT in environment');
@@ -202,7 +211,27 @@ controller.hears('eliminate(.*)', 'direct_message,direct_mention,mention', funct
           });
     }
 });
+controller.hears('feedback(.*)', 'direct_message,direct_mention,mention', function(bot, message) {
+  var text = message.match[1];
 
+  var mailOptions = {
+    from: 'polyfish42@gmail.com',
+    to: 'jbrady4@babson.edu',
+    subject: 'Decider Bot Feedback',
+    text: text
+  };
+
+  transporter.sendMail(mailOptions, function(err, info){
+    if(err){
+      console.log(err);
+    }else{
+      console.log('Message sent: ' +info.response);
+    }
+  });
+
+  bot.reply(message, 'Thanks for your feeback! I just sent it to my creator.');
+
+});
 // Get all the teams from the database
 controller.storage.teams.all(function(err, teams) {
 
