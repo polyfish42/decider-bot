@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var http = require('http').Server(app);
 var dotenv = require('dotenv');
 
+// Load local token and environment variables
 dotenv.load();
 
 app.use(express.static(__dirname + '/public'));

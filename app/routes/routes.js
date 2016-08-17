@@ -9,11 +9,11 @@ module.exports = function(app) {
     res.render('root');
   });
 
-  app.get('/start', function(req, res) {
-    var connect = require('../controllers/botkit');
-    connect();
-    res.send('Hello World');
-  });
+  // app.get('/start', function(req, res) {
+  //   var connect = require('../controllers/botkit');
+  //   connect();
+  //   res.send('Hello World');
+  // });
 
   app.get('/new', function(req, res) {
     console.log("================== START TEAM REGISTRATION ==================");
