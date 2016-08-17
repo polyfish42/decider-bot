@@ -3,7 +3,7 @@ var Botkit = require('botkit'),
         mongoUri: process.env.MONGODB_URI
     });
 
-var os = require('os');
+var os = require('os');// Allows you to get information about the operation system.
 
 if (!process.env.SLACK_ID || !process.env.SLACK_SECRET || !process.env.PORT) {
   console.log('Error: Specify SLACK_ID SLACK_SECRET and PORT in environment');
@@ -18,6 +18,7 @@ var controller = Botkit.slackbot({
 exports.controller = controller;
 
 //CONNECTION FUNCTIONS=====================================================
+// The command is triggered during the creation of a team in routes.js
 exports.connect = function(team_config){
   var bot = controller.spawn(team_config);
   controller.trigger('create_bot', [bot, team_config]);
@@ -34,10 +35,11 @@ function trackBot(bot) {
 controller.on('create_bot',function(bot,team) {
 
   if (_bots[bot.config.token]) {
-    // already online! do nothing.
+    // Bot is already online! do nothing.
     console.log("already online! do nothing.");
   }
   else {
+    // starts real time messaging session.
     bot.startRTM(function(err) {
 
       if (!err) {
@@ -205,7 +207,7 @@ controller.storage.teams.all(function(err, teams) {
         throw new Error(err);
     }
 
-    // connect all teams with bots up to slack!
+    // connect all teams with bots up to slack! If already connected, nothing will happen (trackbot).
     for (var t in teams) {
         if (teams[t].bot) {
             var bot = controller.spawn(teams[t]).startRTM(function(err) {

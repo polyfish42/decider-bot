@@ -1,27 +1,34 @@
-var Request = require('request');
+var Request = require('request'); // Simple way to make http calls. https://www.npmjs.com/package/request
 var slack = require('../controllers/botkit');
 
 module.exports = function(app) {
 
+// Renders root view
   app.get('/', function(req, res) {
     console.log("Rending root view");
 
     res.render('root');
   });
 
+// I don't think this is needed anymore. Can I delete?
   // app.get('/start', function(req, res) {
   //   var connect = require('../controllers/botkit');
   //   connect();
   //   res.send('Hello World');
   // });
 
+// Creates new user
   app.get('/new', function(req, res) {
     console.log("================== START TEAM REGISTRATION ==================");
-    //temporary authorization code
+/*
+    After the user authorizes our app, slack redirects to our
+    redirect uri with a temporary authorization 'code' in the GET request.
+*/
     var auth_code = req.query.code;
 
+
     if(!auth_code){
-      //user refused auth
+      //This means user refused auth
       res.redirect('/');
     }
     else{
@@ -32,8 +39,8 @@ module.exports = function(app) {
 
   //CREATION ===================================================
 
+  //post code, app ID, and app secret, to get token from Slack
   var perform_auth = function(auth_code, res){
-    //post code, app ID, and app secret, to get token
     var auth_adresse = 'https://slack.com/api/oauth.access?';
     auth_adresse += 'client_id=' + process.env.SLACK_ID;
     auth_adresse += '&client_secret=' + process.env.SLACK_SECRET;
@@ -47,6 +54,7 @@ module.exports = function(app) {
       }
 
       else{
+        // saves new token Slack just gave us (see diagram on this page: https://api.slack.com/docs/oauth).
         var auth = JSON.parse(body);
         console.log("New user auth");
         console.log(auth);
@@ -56,17 +64,19 @@ module.exports = function(app) {
     });
   };
 
+  // register team with Slack
   var register_team = function(auth, res){
     //first, get authenticating user ID
     var url = 'https://slack.com/api/auth.test?';
     url += 'token=' + auth.access_token;
-
+    // Get request with url to get team properties to save in database.
     Request.get(url, function (error, response, body) {
       if (error){
         console.log(error);
         res.sendStatus(500);
       }
       else{
+        // A safe way to try some statements and catch an error if thrown.
         try{
           var identity = JSON.parse(body);
           console.log(identity);
@@ -82,9 +92,10 @@ module.exports = function(app) {
             url: identity.url,
             name: identity.team
           };
+          // Start an instance of the bot for this team.
           startBot(team);
           res.send("Your bot has been installed");
-
+          // Save user in the database.
           saveUser(auth, identity);
         }
         catch(e){
@@ -103,7 +114,7 @@ module.exports = function(app) {
   var saveUser = function(auth, identity){
     // what scopes did we get approved for?
     var scopes = auth.scope.split(/\,/);
-
+    // Check to see if there's a new user, if not create a new one.
     slack.controller.storage.users.get(identity.user_id, function(err, user) {
       isnew = false;
       if (!user) {
@@ -116,6 +127,7 @@ module.exports = function(app) {
               user: identity.user,
           };
       }
+      // Save or update the user.
       slack.controller.storage.users.save(user, function(err, id) {
         if (err) {
           console.log('An error occurred while saving a user: ', err);
