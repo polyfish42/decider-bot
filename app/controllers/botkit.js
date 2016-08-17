@@ -97,6 +97,10 @@ if (!Array.prototype.remove) {
     };
 }
 
+function randomlyDecide (options) {
+  return options[Math.floor(Math.random() * options.length)];
+}
+
 controller.hears('help', 'direct_message,direct_mention,mention', function(bot, message) {
 
     bot.reply(message, "I can help you make decisions in a variety of ways. Below I've listed my 'decision algorithms' which are processes for making decisions. Type the name of an algorithm below, and I'll walk you through it.\n\n" +
@@ -113,15 +117,15 @@ controller.hears('random(.*)', 'direct_message,direct_mention,mention', function
         bot.startConversation(message, function(err, convo) {
             convo.ask("Great, please list all your options separated by commas.", function(response, convo) {
                 options = response.text.split(",");
-                var decision = options[Math.floor(Math.random() * options.length)];
+                var decision = randomlyDecide(options);
                 bot.reply(message, "I randomly select " + decision);
-
+                convo.stop();
             });
         });
     } else {
         options = message.match[1].split(",");
-        var decision = options[Math.floor(Math.random() * options.length)];
-        bot.reply(message, decision);
+        var decision = randomlyDecide(options);
+        bot.reply(message, "I randomly select " + decision);
     }
 
 
@@ -132,8 +136,8 @@ controller.hears('decide between (.*) (?:or|and) (.*)', 'direct_message,direct_m
     options = message.match[1].split(",");
     options.push(message.match[2]);
     options = options.filter(Boolean);
-    var decision = options[Math.floor(Math.random() * options.length)];
-    bot.reply(message, decision);
+    var decision = randomlyDecide(options);
+    bot.reply(message, "I randomly select " + decision);
 
 });
 
@@ -199,6 +203,7 @@ controller.hears('eliminate(.*)', 'direct_message,direct_mention,mention', funct
     }
 });
 
+// Get all the teams from the database
 controller.storage.teams.all(function(err, teams) {
 
     console.log(teams);
