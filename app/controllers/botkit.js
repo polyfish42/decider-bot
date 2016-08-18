@@ -112,11 +112,12 @@ function randomlyDecide (options) {
 
 controller.hears('help', 'direct_message,direct_mention,mention', function(bot, message) {
 
-    bot.reply(message, "I can help you make decisions in a variety of ways. Below I've listed my 'decision algorithms' which are processes for making decisions. Type the name of an algorithm below, and I'll walk you through it.\n\n" +
-        "*Random*: I randomly select from a list of options.\n" +
-        "*Elimination*: You create a list of options, and I ask you to eliminate them one by one.\n" +
-        "*Group Eliminate*: I help a group decide by generating a list of options and then asking each person to take turns eliminating options until one is left. Great for movies or deciding where to eat.\n\n" +
-        "*Feedback*: Report a bug give feedback to my creator.");
+    bot.reply(message, "I can help you make decisions in a variety of ways. Below I've listed my 'decision algorithms' and their commands. Alternatively, type the name of an algorithm below without a list of options, and I'll walk you through it.\n\n" +
+        "*I can randomly select from a list of options.*\n" +
+        ">Just type this command and separate your choices with commas: `random <option1>,<option2>,<option3>`\n"+
+        "*I can help you eliminate from a set of options.*: \n" +
+        ">Use this command, also listing your options separated by commas: `eliminate <option1>,'<option2>,<option3>...'`\n\n" +
+        "You can send my creator feedback straight from here using: `feedback <comments and suggestions>`");
 
 });
 
