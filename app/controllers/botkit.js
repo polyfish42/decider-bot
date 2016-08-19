@@ -79,7 +79,7 @@ controller.on('create_bot',function(bot,team) {
               "*I can randomly select from a list of options.*\n" +
               ">Just type this command and separate your choices with commas: `random <option1>,<option2>,<option3>`\n"+
               "*I can help you eliminate from a set of options.*: \n" +
-              ">Use this command, also listing your options separated by commas: `eliminate <option1>,'<option2>,<option3>...'`\n\n" +
+              ">Use this command, also listing your options separated by commas: `eliminate <option1>,<option2>,<option3>...`\n\n" +
               "You can send my creator feedback straight from here using: `feedback <comments and suggestions>`");
           convo.say("Anytime you need to see this of commands again, just type `help`.")
           convo.say('You must now /invite me to a channel so that I can be of use!');
@@ -123,7 +123,7 @@ controller.hears('help', 'direct_message,direct_mention,mention', function(bot, 
         "*I can randomly select from a list of options.*\n" +
         ">Just type this command and separate your choices with commas: `random <option1>,<option2>,<option3>`\n"+
         "*I can help you eliminate from a set of options.*: \n" +
-        ">Use this command, also listing your options separated by commas: `eliminate <option1>,'<option2>,<option3>...'`\n\n" +
+        ">Use this command, also listing your options separated by commas: `eliminate <option1>,<option2>,<option3>...`\n\n" +
         "You can send my creator feedback straight from here using: `feedback <comments and suggestions>`");
 
 });
