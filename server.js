@@ -18,6 +18,6 @@ app.set('view engine', 'ejs'); // Sets view engine to ejs
 require('./app/routes/routes')(app); // Reuires all the http request route logic
 
 // Will this be needed after we're on a server?
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
   console.log('Listening on port 3000');
 });
